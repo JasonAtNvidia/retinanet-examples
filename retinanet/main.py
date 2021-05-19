@@ -159,7 +159,7 @@ def worker(rank, args, world, model, state):
         })
 
         torch.cuda.set_device(rank)
-        torch.distributed.init_process_group(backend='nccl', init_method='env://')
+        #torch.distributed.init_process_group(backend='nccl', init_method='env://')
 
         if args.batch % world != 0:
             raise RuntimeError('Batch size should be a multiple of the number of GPUs')
