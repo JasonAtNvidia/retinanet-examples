@@ -9,7 +9,8 @@ from .backbones.layers import convert_fixedbn_model
 
 import platform
 from .data import DataIterator, RotatedDataIterator
-if platform.machine() not 'aarch64': from .dali import DaliDataIterator
+if platform.machine() != 'aarch64': 
+    from .dali import DaliDataIterator
 from .utils import ignore_sigint, post_metrics, Profiler
 from .infer import infer
 

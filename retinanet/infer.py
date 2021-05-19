@@ -9,7 +9,8 @@ from pycocotools.cocoeval import COCOeval
 import numpy as np
 
 from .data import DataIterator, RotatedDataIterator
-if platform.machine() not 'aarch64': from .dali import DaliDataIterator
+if platform.machine() != 'aarch64': 
+    from .dali import DaliDataIterator
 from .model import Model
 from .utils import Profiler, rotate_box
 
