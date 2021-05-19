@@ -9,13 +9,18 @@ from pycocotools.cocoeval import COCOeval
 import numpy as np
 
 from .data import DataIterator, RotatedDataIterator
-from .dali import DaliDataIterator
+if platform.machine() not 'aarch64': from .dali import DaliDataIterator
 from .model import Model
 from .utils import Profiler, rotate_box
 
 
 def infer(model, path, detections_file, resize, max_size, batch_size, mixed_precision=True, is_master=True, world=0,
           annotations=None, use_dali=True, is_validation=False, verbose=True, rotated_bbox=False):
+
+    if platform.machine() == 'aarch64':
+        print('Dali is not supported on Jetson aarch64, Dali being disabled')
+        use_dali=False
+
     'Run inference on images from path'
 
     backend = 'pytorch' if isinstance(model, Model) or isinstance(model, DDP) else 'tensorrt'

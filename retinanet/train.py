@@ -7,8 +7,9 @@ from apex import amp, optimizers
 from apex.parallel import DistributedDataParallel
 from .backbones.layers import convert_fixedbn_model
 
+import platform
 from .data import DataIterator, RotatedDataIterator
-from .dali import DaliDataIterator
+if platform.machine() not 'aarch64': from .dali import DaliDataIterator
 from .utils import ignore_sigint, post_metrics, Profiler
 from .infer import infer
 
@@ -18,6 +19,11 @@ def train(model, state, path, annotations, val_path, val_annotations, resize, ma
           verbose=True, metrics_url=None, logdir=None, rotate_augment=False, augment_brightness=0.0,
           augment_contrast=0.0, augment_hue=0.0, augment_saturation=0.0, regularization_l2=0.0001, rotated_bbox=False,
           absolute_angle=False):
+
+    if platform.machine() == 'aarch64':
+        print('Dali is not supported on Jetson aarch64, Dali being disabled')
+        use_dali=False
+
     'Train the model on the given dataset'
 
     # Prepare model
